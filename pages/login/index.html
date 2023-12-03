@@ -4,29 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Fazer login</title>
     <link rel="stylesheet" href="https://unpkg.com/mvp.css">
-    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+<!--     <link rel="stylesheet" href="login.css"> -->
+    <script type="module" src="login.js" async><script/>
 </head>
 <body>
     <header>
         <nav>
             <ul>
-                <li><a href="">Sign Up</a></li>
+                <li><a href="">Criar conta</a></li>
             </ul>
         </nav>
-        <h1>Login</h1>
+        <h1>Fazer login</h1>
     </header>
     <main>
         <p>Digite seus dados de acesso abaixo</p>
-        <form method="POST">
+        <form id="login-form" method="PATCH" action="https://localhost:5000/fortress/api//userAuth/email">
             <label for="login-email">E-mail</label>
-            <input id="login-email" type="email" placeholder="Digite seu e-mail" autofocus="true" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"/>
+            <input id="login-email" name="email" type="email" placeholder="Digite seu e-mail"
+            autofocus="true" spellcheck="false" autocomplete="email" autocorrect="off" autocapitalize="off"/>
             <label for="login-password">Senha</label>
-            <input id="login-password" type="password" placeholder="Digite sua senha" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"/>
+            <input id="login-password" name="password" type="password" placeholder="Digite sua senha"
+            spellcheck="false" autocomplete="current-password" autocorrect="off" autocapitalize="off"/>
             <button id="login-submit" type="submit">Acessar</button>
             <div><a href="/">Esqueci minha senha</a></div>
         </form>
+        <dialog id="login-email-error">
+            <p>O e-mail digitado não está cadastrado</p>
+            <form method="dialog">
+                <button>OK</button>
+            </form>
+        </dialog>
+        <dialog id="login-password-error">
+            <p>A senha digitada está incorreta</p>
+            <form method="dialog">
+                <button>OK</button>
+            </form>
+        </dialog>
     </main>
     <footer></footer>
 </body>

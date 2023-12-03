@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR" color-mode="user">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar conta</title>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+<!--     <link rel="stylesheet" href="signup.css"> -->
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="">Sign Up</a></li>
+            </ul>
+        </nav>
+        <h1>Criar conta</h1>
+    </header>
+    <main>
+        <p>Digite seus dados de acesso abaixo</p>
+        <form method="POST" action="https://localhost:5000/fortress/api/user">
+            <label for="signup-name">E-mail</label>
+            <input id="signup-name" name="name" type="text" placeholder="Digite seu e-mail"
+                autofocus="true" spellcheck="false" autocomplete="name" autocorrect="off" autocapitalize
+            <label for="signup-email">E-mail</label>
+            <input id="signup-email" name="email" type="email" placeholder="Digite seu e-mail"
+                autofocus="true" spellcheck="false" autocomplete="email" autocorrect="off" autocapitalize="off"/>
+            <input id="signup-password" name="password" type="password" placeholder="Digite sua senha"
+                spellcheck="false" autocomplete="new-password" autocorrect="off" autocapitalize="off"/>
+            <label for="signup-confirm-password">Confirme sua senha</label>
+            <input id="signup-confirm-password" type="password" placeholder="Digite sua senha novamente"
+                spellcheck="false" autocomplete="new-password" autocorrect="off" autocapitalize="off"/>
+            <button id="signup-submit" type="submit">Acessar</button>
+            <div><a href="/">Já possuo conta</a></div>
+        </form>
+    </main>
+    <footer></footer>
+</body>
+</html> 
