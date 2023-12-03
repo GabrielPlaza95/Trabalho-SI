@@ -1,4 +1,4 @@
-let form = getElementById("login-form")
+let form = getElementById("2fa-form")
 
 form.onsubmit = async (ev) => {
 	ev.preventDefault()
@@ -7,14 +7,15 @@ form.onsubmit = async (ev) => {
 		method: form.method,
 		body: new FormData(form)
 	})
-
-	let result = await response.json()
+	
+	let status = response.status
+	let bearerToken = await response.text()
 	
 	if (result.status === 200) {
-		document.location.href.assign("https://localhost:5000/fortress/2fa")
+		document.location.href.assign("https://localhost:5000/fortress/home")
 	}
 	else if (result.status === 400) {
-		let errorDialog = getElementById("login-email-error")
+		let errorDialog = getElementById("2fa-error")
 		
 		errorDialog.show()
 	}

@@ -1,4 +1,5 @@
-let form = getElementById("login-form")
+let form = getElementById("signup-form")
+
 
 form.onsubmit = async (ev) => {
 	ev.preventDefault()
@@ -11,11 +12,9 @@ form.onsubmit = async (ev) => {
 	let result = await response.json()
 	
 	if (result.status === 200) {
-		document.location.href.assign("https://localhost:5000/fortress/2fa")
+		document.location.href = "https://localhost:5000/fortress/2fa"
 	}
 	else if (result.status === 400) {
-		let errorDialog = getElementById("login-email-error")
 		
-		errorDialog.show()
 	}
 }

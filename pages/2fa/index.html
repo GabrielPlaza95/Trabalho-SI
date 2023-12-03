@@ -7,6 +7,7 @@
     <title>Digite o código</title>
     <link rel="stylesheet" href="https://unpkg.com/mvp.css">
 <!--     <link rel="stylesheet" href="login.css"> -->
+    <script type="module" src="2fa.js" async></script>
 </head>
 <body>
     <header>
@@ -18,13 +19,22 @@
         <h1>Digite o código</h1>
     </header>
     <main>
-        <p>Digite o código enviado por SMS para seu telefone para se autenticar</p>
-        <form method="PATCH" action="https://localhost:5000/fortress/api/userAuth/otp">
-            <input type="one-time-code" placeholder="Digite o código"
-            autofocus="true" spellcheck="false" autocomplete="one-time-code" autocorrect="off" autocapitalize="off"/>
-            <button id="2fa-submit" type="submit">Acessar</button>
-            <div><a href="/">Não recebi o código</a></div>
-        </form>
+        <section>
+            <form id="2fa-form" method="PATCH" action="https://localhost:5000/fortress/api/userAuth/otp">
+                <p>Digite o código recebido em seu aplicativo de autenticação</p>
+                <br>
+                <input type="one-time-code" placeholder="Digite o código"
+                autofocus="true" spellcheck="false" autocomplete="one-time-code" autocorrect="off" autocapitalize="off"/>
+                <button id="2fa-submit" type="submit">Acessar</button>
+                <div><a href="/">Não recebi o código</a></div>
+            </form>
+        </section>
+        <dialog id="2fa-error">
+            <p>Código incorreto</p>
+            <form method="dialog">
+                <button>OK</button>
+            </form>
+        </dialog>
     </main>
     <footer></footer>
 </body>
