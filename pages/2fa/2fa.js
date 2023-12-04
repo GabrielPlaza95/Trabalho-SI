@@ -1,21 +1,21 @@
-let form = getElementById("2fa-form")
+let form = document.getElementById("2fa-form")
 
 form.onsubmit = async (ev) => {
 	ev.preventDefault()
 
 	let response = await fetch(form.target, {
-		method: form.method,
+		method: form.getAttribute("method"),
 		body: new FormData(form)
 	})
 	
 	let status = response.status
 	let bearerToken = await response.text()
 	
-	if (result.status === 200) {
-		document.location.href.assign("https://localhost:5000/fortress/home")
+	if (response.status === 200) {
+		document.location.assign("https://localhost:5000/fortress/home")
 	}
-	else if (result.status === 400) {
-		let errorDialog = getElementById("2fa-error")
+	else if (response.status === 400) {
+		let errorDialog = document.getElementById("2fa-error")
 		
 		errorDialog.show()
 	}

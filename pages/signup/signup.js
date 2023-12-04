@@ -1,20 +1,20 @@
-let form = getElementById("signup-form")
+let form = document.getElementById("signup-form")
 
 
 form.onsubmit = async (ev) => {
 	ev.preventDefault()
 
 	let response = await fetch(form.target, {
-		method: form.method,
+		method: form.getAttribute("method"),
 		body: new FormData(form)
 	})
 
-	let result = await response.json()
+	let id = await response.text()
 	
-	if (result.status === 200) {
-		document.location.href = "https://localhost:5000/fortress/2fa"
+	if (response.status === 200) {
+		document.location.assign("https://localhost:5000/fortress/2fa")
 	}
-	else if (result.status === 400) {
+	else if (response.status === 400) {
 		
 	}
 }
