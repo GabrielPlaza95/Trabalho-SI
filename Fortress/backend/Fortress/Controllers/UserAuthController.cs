@@ -1,28 +1,9 @@
-using static Microsoft.AspNetCore.Http.StatusCodes;
+Ôªøusing static Microsoft.AspNetCore.Http.StatusCodes;
 using Google.Authenticator;
+using Fortress.Infrastructure.Repository;
 
 namespace Fortress.Controllers
 {
-    [ApiController]
-    [Route("user")]
-    public class UserController : ControllerBase
-    {
-
-        [HttpPost]
-        [ProducesResponseType(Status201Created)]
-        [ProducesResponseType(Status400BadRequest)]
-        public ActionResult<CreateUserResponse> Post([FromBody] CreateUserRequest request)
-        {
-            //for frontend testing
-            var response = new CreateUserResponse()
-            {
-                Id = SampleData.UserId
-            };
-
-            return Created(string.Empty, response);
-        }
-    }
-
     [ApiController]
     [Route("userAuth")]
     public class UserAuthController : ControllerBase
@@ -30,9 +11,17 @@ namespace Fortress.Controllers
         private readonly string _otpAuthIssuer;
         private readonly TwoFactorAuthenticator _otpAuthenticator = new();
 
-        public UserAuthController(IConfiguration configuration)
+        private readonly IUserRepository _userRespository;
+        private readonly IUserAuthRepository _userAuthRespository;
+
+        public UserAuthController(
+            IConfiguration configuration,
+            IUserRepository userRespository,
+            IUserAuthRepository userAuthRespository)
         {
             _otpAuthIssuer = configuration["OTPAuthIssuer"];
+            _userRespository = userRespository;
+            _userAuthRespository = userAuthRespository;
         }
 
         [HttpPatch("email")]
@@ -49,7 +38,7 @@ namespace Fortress.Controllers
         [ProducesResponseType(Status401Unauthorized)]
         public ActionResult PatchOTP([FromBody] AuthenticateUserOTPRequest request)
         {
-            //todo: verificar se est· autenticado com email
+            //todo: verificar se est√° autenticado com email
 
             var isValid = _otpAuthenticator.ValidateTwoFactorPIN(
                 SampleData.OTPAuthSecretKey,
@@ -64,11 +53,11 @@ namespace Fortress.Controllers
         [ProducesResponseType(Status401Unauthorized)]
         public ActionResult<GetUserOTPSetupResponse> GetOTPSetup([FromQuery] GetUserOTPSetupRequest request)
         {
-            //todo: verificar se est· autenticado com email
+            //todo: verificar se est√° autenticado com email
 
             //for frontend testing
             var setup = _otpAuthenticator.GenerateSetupCode(
-                _otpAuthIssuer, 
+                _otpAuthIssuer,
                 SampleData.Email,
                 SampleData.OTPAuthSecretKey,
                 false);
@@ -79,7 +68,7 @@ namespace Fortress.Controllers
                 Key = setup.ManualEntryKey,
                 QrCode = setup.QrCodeSetupImageUrl
             };
-            
+
             return Ok(response);
         }
 
@@ -89,7 +78,7 @@ namespace Fortress.Controllers
         [ProducesResponseType(Status401Unauthorized)]
         public ActionResult PatchCheck()
         {
-            //todo: enquanto n„o tiver bearer token, verificar se est· autenticado com email e otp
+            //todo: enquanto n√£o tiver bearer token, verificar se est√° autenticado com email e otp
             return Ok();
         }
     }
