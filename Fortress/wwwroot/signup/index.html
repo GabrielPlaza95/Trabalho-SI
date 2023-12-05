@@ -1,19 +1,29 @@
 
 <!DOCTYPE html>
-<html lang="pt-BR" color-mode="user">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar conta</title>
     <link rel="stylesheet" href="https://unpkg.com/mvp.css">
 <!--     <link rel="stylesheet" href="signup.css"> -->
-    <script type="module" src="signup.js" async></script>
+    <style>
+        input[type="text"] {
+            width: unset;
+        }
+    </style>
+    <script type="module" src="signup.js" defer></script>
+    <script src="//code.iconify.design/1/1.0.6/iconify.min.js"></script>
 </head>
 <body>
     <header>
         <nav>
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 512 512">
+                <path fill="currentColor" d="M102.78 20.625V113.5L149 165.22v183.03h-25.875L99.53 489.156h319.94L395.874 348.25H370.03V165.22l46.22-51.72V20.625h-53.938v43.97H329.47v-43.97h-53.94v43.97h-32.436v-43.97h-53.938v43.97H156.72v-43.97h-53.94zM263.813 157.72c30.17 0 54.625 24.455 54.625 54.624c0 20.84-11.65 38.946-28.812 48.156l27.625 140.25H210.375L238 260.5c-17.148-9.214-28.813-27.326-28.813-48.156c0-30.17 24.457-54.625 54.625-54.625z"/>
+            </svg>
+            <h1><b>Fortress</b></h1>
             <ul>
-                <li><a href="">Sign Up</a></li>
+                <li><a href="/login">Entrar</a></li>
             </ul>
         </nav>
         <h1>Criar conta</h1>
@@ -29,13 +39,15 @@
                 <label for="signup-email">E-mail</label>
                 <input id="signup-email" name="email" type="email" placeholder="Digite seu e-mail"
                     autofocus="true" spellcheck="false" autocomplete="email" autocorrect="off" autocapitalize="off"/>
+                <label for="signup-password">Digite sua senha</label>
                 <input id="signup-password" name="password" type="password" placeholder="Digite sua senha"
-                    spellcheck="false" autocomplete="new-password" autocorrect="off" autocapitalize="off"/>
+                    spellcheck="false" autocomplete="new-password" autocorrect="off" autocapitalize="off" minlength="10"/>
                 <label for="signup-confirm-password">Confirme sua senha</label>
-                <input id="signup-confirm-password" type="password" placeholder="Digite sua senha novamente"
+                <input id="signup-confirm-password" type="password" placeholder="Repita sua senha"
                     spellcheck="false" autocomplete="new-password" autocorrect="off" autocapitalize="off"/>
+                <p>Mostrar Senha <input id="signup-show-password" type="checkbox"></p>
                 <button id="signup-submit" type="submit">Acessar</button>
-                <div><a href="/">Já possuo conta</a></div>
+                <div><a href="/login">Já possuo conta</a></div>
             </form>
         <section>
     </main>
