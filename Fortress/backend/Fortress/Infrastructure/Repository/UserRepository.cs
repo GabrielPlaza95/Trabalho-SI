@@ -12,6 +12,12 @@ namespace Fortress.Infrastructure.Repository
             _context = context;        
         }
 
+        public void Add(User user)
+        {
+            _context.Users.Add(user);
+            _context.SaveChanges();
+        }
+
         public User GetById(Guid id)
             => _context.Users.FirstOrDefault(x => x.Id == id);
         
@@ -19,6 +25,7 @@ namespace Fortress.Infrastructure.Repository
 
     public interface IUserRepository
     {
+        void Add(User user);
         User GetById(Guid id);
     }
 }
