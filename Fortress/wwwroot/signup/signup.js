@@ -17,6 +17,24 @@ passwordConfirm.onchange = (ev) => {
 	)
 }
 
+password.onchange = (ev) => {
+	if (!/\p{Nd}/u.test(password.value)) {
+		password.setCustomValidity("A senha deve ter ao menos 1 caractere numérico.")
+	}
+	else if (!/\p{Lu}/u.test(password.value)) {
+		password.setCustomValidity("A senha deve ter ao menos 1 caractere maiúsculo.")
+	}
+	else if (!/\p{Ll}/u.test(password.value)) {
+		password.setCustomValidity("A senha deve ter ao menos 1 caractere minúsculo.")
+	}
+	else if (!/[^\p{L}\p{N}]/u.test(password.value)) {
+		password.setCustomValidity("A senha deve ter ao menos 1 caractere não alfanumérico.")
+	}
+	else {
+		password.setCustomValidity("")
+	}
+}
+
 form.onsubmit = async (ev) => {
 	ev.preventDefault()
 
