@@ -58,10 +58,9 @@ namespace Fortress.Controllers
 
                 _userAuthRespository.Add(newUserAuth);
             }
-            else if (userAuth.HasExpired(_userAuthExpirationTime))
+            else
             {
                 userAuth.LastAuthTimeUtc = DateTime.UtcNow;
-
                 _userAuthRespository.Update(userAuth);
             }
 
@@ -107,7 +106,6 @@ namespace Fortress.Controllers
             else
             {
                 userAuthOTP.LastAuthTimeUtc = DateTime.UtcNow;
-
                 _userAuthRespository.Update(userAuthOTP);
             }
 
