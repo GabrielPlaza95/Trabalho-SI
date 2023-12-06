@@ -50,6 +50,8 @@ form.onsubmit = async (ev) => {
 		document.location.assign("/2fa")
 	}
 	else if (response.status === 400) {
+		let errorDialog = document.getElementById("signup-error")
 		
+		errorDialog.show()
 	}
 }
