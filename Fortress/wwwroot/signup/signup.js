@@ -38,15 +38,21 @@ password.onchange = (ev) => {
 form.onsubmit = async (ev) => {
 	ev.preventDefault()
 
+	let data = new FormData(form)
+	
+	data = Object.fromEntries(data.entries())
+	data = JSON.stringify(data)
+	
 	let response = await fetch(form.action, {
 		method: "post",
-		body: new FormData(form),
-		headers: { "Content-Type": "application/json" }
+		body: data,
+		headers: { "Content-Type": "application/json", "Accept": "application/json" }
 	})
 
-	let id = await response.text()
+	let { id } = await response.json()
 	
-	if (response.status === 200) {
+	if (response.status === 201) {
+		document.cookie = `login_id=${id}; path=/; max-age=3600`;
 		document.location.assign("/2fa")
 	}
 	else if (response.status === 400) {

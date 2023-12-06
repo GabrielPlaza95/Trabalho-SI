@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digite o código</title>
     <link rel="stylesheet" href="https://unpkg.com/mvp.css">
-<!--     <link rel="stylesheet" href="login.css"> -->
     <script type="module" src="2fa.js" async></script>
 </head>
 <body>
@@ -27,12 +26,19 @@
             <form id="2fa-form" method="post" action="/userAuth/otp">
                 <p>Digite o código de 6 dígitos recebido em seu aplicativo de autenticação</p>
                 <br>
-                <input type="one-time-code" placeholder="Digite o código"
+                <input type="one-time-code" name="code" placeholder="Digite o código"
                 autofocus="true" spellcheck="false" autocomplete="one-time-code" autocorrect="off" autocapitalize="off"
                 inputmode="numeric" maxlength="6" pattern="\d{6}" required/>
                 <button id="2fa-submit" type="submit">Acessar</button>
-                <div><a href="/login">Não recebi o código</a></div>
             </form>
+        </section>
+        <section>
+            <aside>
+                <p>Configure o Google Authenticator caso ainda não o tenha feito</p>
+                <br>
+                <p id="2fa-setup-name"></p>
+                <p id="2fa-setup-key"></p>
+            </aside>
         </section>
         <dialog id="2fa-error">
             <form method="dialog">
