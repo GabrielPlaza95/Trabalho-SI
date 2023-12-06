@@ -45,7 +45,7 @@ namespace Fortress.Controllers
             if (result != PasswordVerificationResult.Success)
                 return BadRequest("Wrong password.");
 
-            var userAuth = _userAuthRespository.GetByUserId(user.Id);
+            var userAuth = _userAuthRespository.GetByUserIdAndAuthFactor(user.Id, AuthFactorEnum.Email);
 
             if (userAuth == null)
             {
@@ -74,13 +74,44 @@ namespace Fortress.Controllers
         [ProducesResponseType(Status401Unauthorized)]
         public ActionResult PatchOTP([FromBody] AuthenticateUserOTPRequest request)
         {
-            //todo: verificar se está autenticado com email
+            var user = _userRespository.GetById(request.UserId);
 
-            var isValid = _otpAuthenticator.ValidateTwoFactorPIN(
-                SampleData.OTPAuthSecretKey,
+            if (user == null)
+                return BadRequest("User does not exist.");
+
+            var userAuthEmail = _userAuthRespository.GetByUserIdAndAuthFactor(user.Id, AuthFactorEnum.Email);
+
+            if (userAuthEmail == null || userAuthEmail.HasExpired(_userAuthExpirationTime))
+                return Unauthorized();
+
+            var isOTPAuthenticated = _otpAuthenticator.ValidateTwoFactorPIN(
+                GetOTPAuthSecretKey(user),
                 request.Code);
 
-            return isValid ? Ok() : BadRequest();
+            if (!isOTPAuthenticated)
+                return Unauthorized();
+
+            var userAuthOTP = _userAuthRespository.GetByUserIdAndAuthFactor(user.Id, AuthFactorEnum.OTP);
+
+            if (userAuthOTP == null)
+            {
+                var newUserAuthOTP = new UserAuth()
+                {
+                    UserId = user.Id,
+                    AuthFactorId = AuthFactorEnum.OTP,
+                    LastAuthTimeUtc = DateTime.UtcNow
+                };
+
+                _userAuthRespository.Add(newUserAuthOTP);
+            }
+            else
+            {
+                userAuthOTP.LastAuthTimeUtc = DateTime.UtcNow;
+
+                _userAuthRespository.Update(userAuthOTP);
+            }
+
+            return Ok();
         }
 
         [HttpGet("otp/setup")]
@@ -89,18 +120,27 @@ namespace Fortress.Controllers
         [ProducesResponseType(Status401Unauthorized)]
         public ActionResult<GetUserOTPSetupResponse> GetOTPSetup([FromQuery] GetUserOTPSetupRequest request)
         {
-            //todo: verificar se está autenticado com email
+            var user = _userRespository.GetById(request.UserId);
 
-            //for frontend testing
+            if (user == null)
+                return BadRequest("User does not exist.");
+
+            var userAuth = _userAuthRespository.GetByUserIdAndAuthFactor(user.Id, AuthFactorEnum.Email);
+
+            if (userAuth == null || userAuth.HasExpired(_userAuthExpirationTime))
+                return Unauthorized();
+
+            var accountName = user.Email;
+
             var setup = _otpAuthenticator.GenerateSetupCode(
                 _otpAuthIssuer,
-                SampleData.Email,
-                SampleData.OTPAuthSecretKey,
+                accountName,
+                GetOTPAuthSecretKey(user),
                 false);
 
             var response = new GetUserOTPSetupResponse()
             {
-                AccountName = SampleData.Email,
+                AccountName = accountName,
                 Key = setup.ManualEntryKey,
                 QrCode = setup.QrCodeSetupImageUrl
             };
@@ -114,17 +154,13 @@ namespace Fortress.Controllers
         [ProducesResponseType(Status401Unauthorized)]
         public ActionResult PatchCheck()
         {
-            //todo: enquanto não tiver bearer token, verificar se está autenticado com email e otp
+            //todo - enquanto não tiver bearer token:
+            //verificar se está autenticado com email e otp
             return Ok();
         }
-    }
 
-    public static class SampleData
-    {
-        public static readonly Guid UserId = new Guid("0a1a80a4-a801-486e-891a-94bbf0516442");
-        public static readonly string Email = "tucanemo@gmail.com";
+        private string GetOTPAuthSecretKey(User user)
+            => user.Id.ToString().Replace("-", "").Substring(0, 10);
 
-        public static string OTPAuthSecretKey
-            => UserId.ToString().Replace("-", "").Substring(0, 10);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Fortress.Domain.Entities;
+using Fortress.Domain.Enums;
 using Fortress.Infrastructure.Context;
 
 namespace Fortress.Infrastructure.Repository
@@ -27,8 +28,8 @@ namespace Fortress.Infrastructure.Repository
         public UserAuth GetById(long id)
             => _context.UserAuths.FirstOrDefault(x => x.Id == id);
 
-        public UserAuth GetByUserId(Guid userId)
-            => _context.UserAuths.FirstOrDefault(x => x.UserId == userId);
+        public UserAuth GetByUserIdAndAuthFactor(Guid userId, AuthFactorEnum authFactor)
+            => _context.UserAuths.FirstOrDefault(x => x.UserId == userId && x.AuthFactorId == authFactor);
     }
 
     public interface IUserAuthRepository
@@ -36,6 +37,6 @@ namespace Fortress.Infrastructure.Repository
         void Add(UserAuth userAuth);
         void Update(UserAuth userAuth);
         UserAuth GetById(long id);
-        UserAuth GetByUserId(Guid userId);
+        UserAuth GetByUserIdAndAuthFactor(Guid userId, AuthFactorEnum authFactor);
     }
 }
