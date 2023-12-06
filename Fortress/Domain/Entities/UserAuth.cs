@@ -8,5 +8,8 @@ namespace Fortress.Domain.Entities
         public Guid UserId { get; set; }
         public AuthFactorEnum AuthFactorId { get; set; }
         public DateTime LastAuthTimeUtc { get; set; }
+
+        public bool HasExpired(TimeSpan expirationInSeconds)
+            => DateTime.UtcNow - LastAuthTimeUtc >= expirationInSeconds;
     }
 }

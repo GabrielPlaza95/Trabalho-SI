@@ -1,6 +1,9 @@
 ﻿using static Microsoft.AspNetCore.Http.StatusCodes;
 using Google.Authenticator;
 using Fortress.Infrastructure.Repository;
+using Fortress.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Fortress.Domain.Enums;
 
 namespace Fortress.Controllers
 {
@@ -8,8 +11,10 @@ namespace Fortress.Controllers
     [Route("userAuth")]
     public class UserAuthController : ControllerBase
     {
+        private readonly TimeSpan _userAuthExpirationTime;
         private readonly string _otpAuthIssuer;
         private readonly TwoFactorAuthenticator _otpAuthenticator = new();
+        private readonly PasswordHasher<User> _passwordHasher = new();
 
         private readonly IUserRepository _userRespository;
         private readonly IUserAuthRepository _userAuthRespository;
@@ -19,6 +24,7 @@ namespace Fortress.Controllers
             IUserRepository userRespository,
             IUserAuthRepository userAuthRespository)
         {
+            _userAuthExpirationTime = TimeSpan.FromSeconds(int.Parse(configuration["UserAuthExpirationInSeconds"]));
             _otpAuthIssuer = configuration["OTPAuthIssuer"];
             _userRespository = userRespository;
             _userAuthRespository = userAuthRespository;
@@ -29,6 +35,36 @@ namespace Fortress.Controllers
         [ProducesResponseType(Status400BadRequest)]
         public ActionResult PatchEmail([FromBody] AuthenticateUserEmailRequest request)
         {
+            var user = _userRespository.GetByEmail(request.Email);
+
+            if (user == null)
+                return BadRequest("User does not exist.");
+
+            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+
+            if (result != PasswordVerificationResult.Success)
+                return BadRequest("Wrong password.");
+
+            var userAuth = _userAuthRespository.GetByUserId(request.UserId);
+
+            if (userAuth == null)
+            {
+                var newUserAuth = new UserAuth()
+                {
+                    UserId = user.Id,
+                    AuthFactorId = AuthFactorEnum.Email,
+                    LastAuthTimeUtc = DateTime.UtcNow
+                };
+
+                _userAuthRespository.Add(newUserAuth);
+            }
+            else if (userAuth.HasExpired(_userAuthExpirationTime))
+            {
+                userAuth.LastAuthTimeUtc = DateTime.UtcNow;
+
+                _userAuthRespository.Update(userAuth);
+            }
+
             return Ok();
         }
 

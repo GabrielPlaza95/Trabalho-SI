@@ -20,12 +20,18 @@ namespace Fortress.Infrastructure.Repository
 
         public User GetById(Guid id)
             => _context.Users.FirstOrDefault(x => x.Id == id);
-        
+
+        public User GetByEmail(string email)
+        {
+            email = email.ToLower();
+            return _context.Users.FirstOrDefault(x => x.Email.ToLower() == email);
+        }
     }
 
     public interface IUserRepository
     {
         void Add(User user);
         User GetById(Guid id);
+        User GetByEmail(string email);
     }
 }

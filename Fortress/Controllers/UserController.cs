@@ -2,6 +2,7 @@ using static Microsoft.AspNetCore.Http.StatusCodes;
 using Fortress.Domain.Entities;
 using Fortress.Domain.Rules;
 using Fortress.Infrastructure.Repository;
+using Microsoft.AspNetCore.Identity;
 
 namespace Fortress.Controllers
 {
@@ -9,6 +10,7 @@ namespace Fortress.Controllers
     [Route("user")]
     public class UserController : ControllerBase
     {
+        private readonly PasswordHasher<User> _passwordHasher = new();
         private readonly IUserRepository _userRespository;
         public UserController(IUserRepository userRespository)
         {
@@ -29,13 +31,19 @@ namespace Fortress.Controllers
             if (!UserRules.IsValidPassword(request.Password))
                 return BadRequest("Invalid password.");
 
+            var userDb = _userRespository.GetByEmail(request.Email);
+
+            if (userDb != null)
+                return BadRequest("Email already in use.");
+
             var user = new User
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,
-                Email = request.Email,
-                PasswordHash = "xxxxx" //todo
+                Email = request.Email
             };
+
+            user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
 
             _userRespository.Add(user);
 
