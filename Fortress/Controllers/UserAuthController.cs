@@ -152,10 +152,18 @@ namespace Fortress.Controllers
         [ProducesResponseType(Status200OK)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status401Unauthorized)]
-        public ActionResult PatchCheck()
+        public ActionResult PatchCheck([FromBody] CheckUserAuthenticationRequest request)
         {
-            //todo - enquanto não tiver bearer token:
-            //verificar se está autenticado com email e otp
+            var userAuthEmail = _userAuthRespository.GetByUserIdAndAuthFactor(request.UserId, AuthFactorEnum.Email);
+
+            if (userAuthEmail == null || userAuthEmail.HasExpired(_userAuthExpirationTime))
+                return Unauthorized();
+
+            var userAuthOTP = _userAuthRespository.GetByUserIdAndAuthFactor(request.UserId, AuthFactorEnum.OTP);
+
+            if (userAuthOTP == null || userAuthOTP.HasExpired(_userAuthExpirationTime))
+                return Unauthorized();
+
             return Ok();
         }
 

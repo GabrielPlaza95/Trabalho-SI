@@ -25,6 +25,11 @@
         public string Code { get; set; }
     }
 
+    public class CheckUserAuthenticationRequest
+    {
+        public Guid UserId { get; set; }
+    }
+
     public class GetUserOTPSetupRequest
     {
         public Guid UserId { get; set; }
