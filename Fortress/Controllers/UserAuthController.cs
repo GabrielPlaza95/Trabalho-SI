@@ -111,6 +111,9 @@ namespace Fortress.Controllers
                 _userAuthRespository.Update(userAuthOTP);
             }
 
+            userAuthEmail.LastAuthTimeUtc = DateTime.UtcNow;
+            _userAuthRespository.Update(userAuthEmail);
+
             return Ok();
         }
 
