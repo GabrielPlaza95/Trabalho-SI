@@ -25,12 +25,13 @@
     <main>
         <section>
             <form id="2fa-form" method="post" action="/userAuth/otp">
-                <p>Digite o código recebido em seu aplicativo de autenticação</p>
+                <p>Digite o código de 6 dígitos recebido em seu aplicativo de autenticação</p>
                 <br>
                 <input type="one-time-code" placeholder="Digite o código"
-                autofocus="true" spellcheck="false" autocomplete="one-time-code" autocorrect="off" autocapitalize="off"/>
+                autofocus="true" spellcheck="false" autocomplete="one-time-code" autocorrect="off" autocapitalize="off"
+                inputmode="numeric" maxlength="6" pattern="\d{6}"/>
                 <button id="2fa-submit" type="submit">Acessar</button>
-                <div><a href="/">Não recebi o código</a></div>
+                <div><a href="/login">Não recebi o código</a></div>
             </form>
         </section>
         <dialog id="2fa-error">
