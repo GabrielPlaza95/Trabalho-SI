@@ -67,6 +67,11 @@ namespace Fortress.Infrastructure.Context
 
             builder.Property(x => x.Id)
                 .HasColumnName("userauthid");
+
+            builder.Property(x => x.LastAuthTimeUtc)
+                .HasColumnType("timestamptz")
+                .HasDefaultValueSql("timezone('UTC'::text, CURRENT_TIMESTAMP(6))")
+                .HasColumnName("lastauthtimeutc");
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Fortress.Controllers
             if (result != PasswordVerificationResult.Success)
                 return BadRequest("Wrong password.");
 
-            var userAuth = _userAuthRespository.GetByUserId(request.UserId);
+            var userAuth = _userAuthRespository.GetByUserId(user.Id);
 
             if (userAuth == null)
             {
