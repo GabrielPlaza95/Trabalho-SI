@@ -64,7 +64,7 @@ namespace Fortress.Controllers
                 _userAuthRespository.Update(userAuth);
             }
 
-            return Ok();
+            return Ok(new { userId = user.Id });
         }
 
         [HttpPatch("otp")]
