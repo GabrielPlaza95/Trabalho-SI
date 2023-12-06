@@ -9,12 +9,12 @@ namespace Fortress.Domain.Rules
             if (name == null)
                 return false;
 
-            return name.Length >= 3;
+            return name.Length is >= 3 and <= 256;
         }
 
         public static bool IsValidEmail(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrWhiteSpace(email) || email.Length > 256)
             {
                 return false;
             }
@@ -32,34 +32,34 @@ namespace Fortress.Domain.Rules
 
         public static bool IsValidPassword(string password)
         {
-            if (password == null || password.Length < 12)
+            if (password == null || password.Length is < 12 or > 256)
                 return false;
 
-            var hasAnyUpper = false;
-            var hasAnyLower = false;
-            var hasAnyNumber = false;
-            var hasAnySymbol = false;
+            var hasUpper = false;
+            var hasLower = false;
+            var hasNumber = false;
+            var hasSymbol = false;
 
             foreach (var character in password)
             {
                 if (char.IsUpper(character))
-                    hasAnyUpper = true;
+                    hasUpper = true;
 
                 if (char.IsLower(character))
-                    hasAnyLower = true;
+                    hasLower = true;
 
                 if (char.IsNumber(character))
-                    hasAnyNumber = true;
+                    hasNumber = true;
 
                 if (char.IsSymbol(character) || char.IsPunctuation(character))
-                    hasAnySymbol = true;
+                    hasSymbol = true;
             }
 
-            return hasAnyUpper
-                && hasAnyLower
-                && hasAnyNumber
-                && hasAnyNumber
-                && hasAnySymbol;
+            return hasUpper
+                && hasLower
+                && hasNumber
+                && hasNumber
+                && hasSymbol;
         }
     }
 }

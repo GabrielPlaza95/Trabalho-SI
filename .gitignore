@@ -1,6 +1,6 @@
 .vs
-*/backend/*/obj/*
-*/backend/*/bin/*
+*Fortress/obj/*
+*Fortress/bin/*
 
 
 # Byte-compiled / optimized / DLL files
