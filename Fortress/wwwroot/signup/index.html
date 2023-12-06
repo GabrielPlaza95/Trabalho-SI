@@ -35,20 +35,28 @@
                 <br>
                 <label for="signup-name">Nome</label>
                 <input id="signup-name" name="name" type="text" placeholder="Digite seu nome"
-                    autofocus="true" spellcheck="false" autocomplete="name" autocorrect="off" autocapitalize="on" minlength="3"/>
+                    autofocus="true" spellcheck="false" autocomplete="name" autocorrect="off" autocapitalize="on"
+                    minlength="3" required/>
                 <label for="signup-email">E-mail</label>
                 <input id="signup-email" name="email" type="email" placeholder="Digite seu e-mail"
-                    autofocus="true" spellcheck="false" autocomplete="email" autocorrect="off" autocapitalize="off"/>
+                    autofocus="true" spellcheck="false" autocomplete="email" autocorrect="off" autocapitalize="off" required/>
                 <label for="signup-password">Digite sua senha</label>
                 <input id="signup-password" name="password" type="password" placeholder="Digite sua senha"
-                    spellcheck="false" autocomplete="new-password" autocorrect="off" autocapitalize="off" minlength="12"/>
+                    spellcheck="false" autocomplete="new-password" autocorrect="off" autocapitalize="off"
+                    minlength="12" required/>
                 <label for="signup-confirm-password">Confirme sua senha</label>
                 <input id="signup-confirm-password" type="password" placeholder="Repita sua senha"
-                    spellcheck="false" autocomplete="new-password" autocorrect="off" autocapitalize="off"/>
+                    spellcheck="false" autocomplete="new-password" autocorrect="off" autocapitalize="off" required/>
                 <p>Mostrar Senha <input id="signup-show-password" type="checkbox"></p>
                 <button id="signup-submit" type="submit">Acessar</button>
                 <div><a href="/login">Já possuo conta</a></div>
             </form>
+            <dialog id="2fa-error">
+                <form method="dialog">
+                    <p>Houve um erro ao realizar seu cadastro</p>
+                    <button>OK</button>
+                </form>
+            </dialog>
         <section>
     </main>
     <footer></footer>
